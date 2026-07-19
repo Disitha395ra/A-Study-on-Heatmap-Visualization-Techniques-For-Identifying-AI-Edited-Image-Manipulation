@@ -23,8 +23,8 @@ COPY models ./models
 # Set python path so backend modules can be imported correctly
 ENV PYTHONPATH=/app
 
-# Expose the port the app runs on
-EXPOSE 8000
+# Expose the port the app runs on (Hugging Face Spaces requires 7860)
+EXPOSE 7860
 
 # Start the application using uvicorn
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "7860"]
