@@ -18,7 +18,7 @@ COPY cam ./cam
 COPY configs ./configs
 COPY metrics ./metrics
 COPY models ./models
-COPY utils ./utils
+
 
 # Set python path so backend modules can be imported correctly
 ENV PYTHONPATH=/app
