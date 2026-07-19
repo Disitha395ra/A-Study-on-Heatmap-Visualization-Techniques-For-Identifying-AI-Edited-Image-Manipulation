@@ -1,4 +1,9 @@
 {
+  "build": {
+    "env": {
+      "VITE_API_BASE_URL": "https://heatmap-backend.onrender.com"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
