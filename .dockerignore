@@ -1,0 +1,12 @@
+.git/
+.venv/
+venv/
+__pycache__/
+*.pyc
+frontend/
+outputs/
+raw_data/
+dataset/
+datasets/
+backend/app/static/results/
+backend/app/static/uploads/
