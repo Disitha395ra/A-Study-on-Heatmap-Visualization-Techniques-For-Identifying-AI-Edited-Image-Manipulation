@@ -11,7 +11,6 @@ import {
   RotateCcw,
   ShieldCheck,
   Sparkles,
-  Upload,
   X,
 } from "lucide-react";
 
@@ -70,36 +69,6 @@ function PredictionBadge({ prediction }) {
     </span>
   );
 }
-
-
-function ProbabilityBar({
-  label,
-  value,
-}) {
-  const percentage = Math.max(
-    0,
-    Math.min(100, value * 100)
-  );
-
-  return (
-    <div className="probability-block">
-      <div className="probability-header">
-        <span>{label}</span>
-        <strong>{formatPercentage(value)}</strong>
-      </div>
-
-      <div className="probability-track">
-        <div
-          className="probability-fill"
-          style={{
-            width: `${percentage}%`,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
 
 function ModelSummaryCard({
   result,
