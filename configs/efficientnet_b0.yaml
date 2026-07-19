@@ -1,0 +1,16 @@
+model_name: efficientnet_b0
+experiment_name: efficientnet_b0_autosplice
+
+num_classes: 2
+image_size: 224
+batch_size: 16
+num_workers: 0
+
+epochs: 10
+learning_rate: 0.0001
+weight_decay: 0.0001
+patience: 3
+
+pretrained: true
+use_class_weights: true
+seed: 42

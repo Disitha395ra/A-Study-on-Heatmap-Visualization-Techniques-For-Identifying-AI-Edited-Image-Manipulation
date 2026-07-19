@@ -1,0 +1,16 @@
+model_name: swin_tiny
+experiment_name: swin_tiny_autosplice
+
+num_classes: 2
+image_size: 224
+batch_size: 8
+num_workers: 0
+
+epochs: 10
+learning_rate: 0.00005
+weight_decay: 0.0001
+patience: 3
+
+pretrained: true
+use_class_weights: true
+seed: 42

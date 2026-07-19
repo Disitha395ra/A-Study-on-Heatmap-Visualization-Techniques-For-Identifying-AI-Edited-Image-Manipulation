@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+.env
+.env.*
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Project outputs
+outputs/**
+backend/app/static/results/**
+backend/app/static/uploads/**
+
+# Data directories (ignored for clean git upload)
+raw_data/
+dataset/
+datasets/
