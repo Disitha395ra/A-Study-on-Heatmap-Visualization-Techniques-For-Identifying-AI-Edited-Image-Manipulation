@@ -2,6 +2,7 @@ from typing import Dict
 
 import torch
 import torch.nn as nn
+import gc
 
 from backend.app.config import (
     MODEL_CONFIGS,
@@ -26,29 +27,47 @@ class ModelService:
             return
 
         print("=" * 70)
-        print("Loading trained models for web application")
+        print("Initializing model service for web application")
         print("=" * 70)
         print("Device:", self.device)
 
         if torch.cuda.is_available():
             print("GPU:", torch.cuda.get_device_name(0))
 
-        for model_name, model_info in MODEL_CONFIGS.items():
-            checkpoint_path = get_checkpoint_path(model_name)
+        # We no longer preload all models to prevent PyTorch OOM on Render
+        self.loaded = True
 
-            if not checkpoint_path.exists():
-                raise FileNotFoundError(
-                    f"Checkpoint not found for {model_name}: "
-                    f"{checkpoint_path}"
-                )
+        print("\nLazy loading enabled. Models will be loaded on demand.")
+        print("=" * 70)
 
-            print(f"\nLoading {model_info['display_name']}...")
+    def get_model(self, model_name: str) -> nn.Module:
+        if not self.loaded:
+            raise RuntimeError(
+                "Models have not been loaded."
+            )
 
+        if model_name not in MODEL_CONFIGS:
+            raise ValueError(
+                f"Model not available: {model_name}"
+            )
+
+        if model_name not in self.models:
+            # Enforce max 1 model in memory for Render free tier (512MB RAM)
+            if len(self.models) >= 1:
+                self.models.clear()
+                self.target_layer_names.clear()
+                gc.collect()
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+
+            print(f"Loading {model_name} on demand...")
             model, target_layer_name = create_model(
                 model_name=model_name,
                 num_classes=NUM_CLASSES,
                 pretrained=False,
             )
+
+            checkpoint_path = get_checkpoint_path(model_name)
 
             checkpoint = torch.load(
                 checkpoint_path,
@@ -66,27 +85,6 @@ class ModelService:
             self.models[model_name] = model
             self.target_layer_names[model_name] = (
                 target_layer_name
-            )
-
-            print(
-                f"Loaded {model_info['display_name']} "
-                f"from epoch {checkpoint.get('epoch', 'unknown')}"
-            )
-
-        self.loaded = True
-
-        print("\nAll models loaded successfully.")
-        print("=" * 70)
-
-    def get_model(self, model_name: str) -> nn.Module:
-        if not self.loaded:
-            raise RuntimeError(
-                "Models have not been loaded."
-            )
-
-        if model_name not in self.models:
-            raise ValueError(
-                f"Model not available: {model_name}"
             )
 
         return self.models[model_name]
