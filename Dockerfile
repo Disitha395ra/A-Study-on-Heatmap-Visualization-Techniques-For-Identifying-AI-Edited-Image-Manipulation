@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install huggingface_hub and download the models
 RUN pip install --no-cache-dir huggingface_hub
-RUN huggingface-cli download Disitha/heatmap-models --local-dir . --repo-type model
+RUN python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='Disitha/heatmap-models', local_dir='.', repo_type='model')"
 
 # Copy the backend code and necessary modules
 COPY backend ./backend
