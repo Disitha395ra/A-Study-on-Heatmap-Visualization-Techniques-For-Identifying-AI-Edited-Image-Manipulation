@@ -7,6 +7,9 @@ export const API_BASE_URL =
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 1800000,
+  headers: {
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 
