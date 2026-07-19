@@ -1,11 +1,5 @@
 FROM python:3.10-slim
 
-# Install system dependencies for OpenCV and other packages
-RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
 # Copy requirements and install them
@@ -27,8 +21,8 @@ COPY models ./models
 # Set python path so backend modules can be imported correctly
 ENV PYTHONPATH=/app
 
-# Expose the port the app runs on (Hugging Face Spaces requires 7860)
+# Expose the port the app runs on (Hugging Face Spaces requires 7860, Render uses PORT)
 EXPOSE 7860
 
 # Start the application using uvicorn
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
