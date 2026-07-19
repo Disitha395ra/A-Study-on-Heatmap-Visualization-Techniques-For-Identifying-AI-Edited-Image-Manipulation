@@ -17,8 +17,10 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install huggingface_hub and download the models
+ARG HF_TOKEN
+ENV HF_TOKEN=${HF_TOKEN}
 RUN pip install --no-cache-dir huggingface_hub
-RUN python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='Disitha/heatmap-models', local_dir='.', repo_type='model')"
+RUN python -c "import os; from huggingface_hub import snapshot_download; snapshot_download(repo_id='Disitha/heatmap-models', local_dir='.', repo_type='model', token=os.environ.get('HF_TOKEN'))"
 
 # Copy the backend code and necessary modules
 COPY backend ./backend
